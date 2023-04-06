@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>React getting started</title>
+  </head>
+  <body>
+    <!-- Root container for react components -->
+    <div id="root"></div>
+
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+
+    <script type="text/babel">
+
+        
+
+      function RandomTrivia() {
+
+        const [trivia, setTrivia] = React.useState({question: '', answer: ''})
+        const [click, setClick] = React.useState(0)
+        const [answer, setAnswer] = React.useState("")
+
+
+        React.useEffect(() => {
+                fetch('https://opentdb.com/api.php?amount=1')
+                .then(res => res.json())
+                .then(resData => {
+                    const newTrivia = {question: resData.results[0].question, answer:resData.results[0].correct_answer}
+                    setTrivia(newTrivia)
+                })
+            }, [click])
+
+        
+
+        const handleQuestionClick = () => {
+          setClick(click + 1)
+          setAnswer("")
+
+        }
+
+        const handleAnswerClick = () => {
+            setAnswer(trivia.answer) 
+        }
+
+        return(
+            <div>
+                <p>Question: {trivia.question}</p>
+                <button onClick={handleQuestionClick}>New question</button>
+                <button onClick={handleAnswerClick}>Show answer</button>
+                <p>Answer: {answer}</p>
+            </div>
+        )
+        
+      };
+
+      ReactDOM.render(<RandomTrivia />, document.getElementById("root"));
+    </script>
+  </body>
+</html>
